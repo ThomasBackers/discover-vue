@@ -22,6 +22,11 @@
             [v-cloak] {
                 display: none;
             }
+
+            input {
+                margin: 10px;
+                display: block;
+            }
         </style>
     </head>
 
@@ -68,6 +73,10 @@
 
                 it is possible to chain those modifiers
             -->
+
+            <hr>
+
+            <v-form />
         </div>
 
         <script src="https://unpkg.com/vue@next"></script>
@@ -96,6 +105,22 @@
                     }
                 }
             })
+
+            app.component('v-form', {
+                template: `
+                    <div>
+                        <h1>{{ title }}</h1>
+                        <input type="email" />
+                        <input type="password" />
+                    </div>
+                `,
+                data() {
+                    return {
+                        title: 'Login Form'
+                    }
+                }
+            })
+
             app.mount('#app')
         </script>
     </body>
