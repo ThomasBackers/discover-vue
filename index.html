@@ -107,16 +107,27 @@
             })
 
             app.component('v-form', {
+                // I used 'prevent' because I want to handle the form submission with JS
+                // and not send the data to the server (default behavior)
+                // it avoids page refreshing -> basically the same as 'event.preventDefault()' inside the callback fct
                 template: `
-                    <div>
+                    <form @submit.prevent="handleSubmit">
                         <h1>{{ title }}</h1>
-                        <input type="email" />
-                        <input type="password" />
-                    </div>
+                        <input type="email" v-model="email" />
+                        <input type="password" v-model="password" />
+                        <button type="submit">Submit</button>
+                    </form>
                 `,
                 data() {
                     return {
-                        title: 'Login Form'
+                        title: 'Login Form',
+                        email: '',
+                        password: ''
+                    }
+                },
+                methods: {
+                    handleSubmit() {
+                        console.log(this.email, this.password)
                     }
                 }
             })
