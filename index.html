@@ -17,11 +17,17 @@
             .box.three {
                 background-color: blue;
             }
+
+            /* v-cloak is now hiding not fully loaded stuff */
+            [v-cloak] {
+                display: none;
+            }
         </style>
     </head>
 
     <body>
-        <div id="app">
+        <!-- v-cloak will hide anything from rendering until the whole Vue app is ready (avoids clipping & so on) -->
+        <div id="app" v-cloak>
             {{ greeting }}
             <input v-model="greeting">
 
@@ -45,6 +51,11 @@
             <div v-if="isVisible2" class="box two"></div>
             <div v-else-if="isVisible3" class="box three"></div>
             <div v-else class="box"></div>
+
+            <hr>
+
+            <div v-if="isButtonActivated" class="box three"></div>
+            <button v-on:click="isButtonActivated = !isButtonActivated">Show Box</button>
         </div>
 
         <script src="https://unpkg.com/vue@next"></script>
@@ -54,9 +65,10 @@
                     return {
                         greeting: 'Hello Vue 3!',
                         isVisible: true,
-                        isShown: false,
+                        isShown: true,
                         isVisible2: true,
-                        isVisible3: true
+                        isVisible3: true,
+                        isButtonActivated: false
                     }
                 }
             })
