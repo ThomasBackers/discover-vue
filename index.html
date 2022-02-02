@@ -29,7 +29,7 @@
         <!-- v-cloak will hide anything from rendering until the whole Vue app is ready (avoids clipping & so on) -->
         <div id="app" v-cloak>
             {{ greeting }}
-            <input v-model="greeting">
+            <input @keyup.enter="greet" v-model="greeting">
 
             <hr>
 
@@ -54,8 +54,11 @@
 
             <hr>
 
+            <!-- the three following buttons are equivalent: -->
+            <!-- <button v-on:click="isButtonActivated = !isButtonActivated">Toggle Box</button> -->
+            <!-- <button @click="isButtonActivated = !isButtonActivated">Toggle Box</button> -->
+            <button @click="toggleBox">Toggle Box</button>
             <div v-if="isButtonActivated" class="box three"></div>
-            <button v-on:click="isButtonActivated = !isButtonActivated">Show Box</button>
         </div>
 
         <script src="https://unpkg.com/vue@next"></script>
@@ -69,6 +72,14 @@
                         isVisible2: true,
                         isVisible3: true,
                         isButtonActivated: false
+                    }
+                },
+                methods: {
+                    toggleBox() {
+                        this.isButtonActivated = !this.isButtonActivated
+                    },
+                    greet() {
+                        console.log(this.greeting)
                     }
                 }
             })
