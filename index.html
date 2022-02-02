@@ -30,6 +30,7 @@
         <div id="app" v-cloak>
             {{ greeting }}
             <input @keyup.enter="greet" v-model="greeting">
+            <input @keyup.enter="greety(otherGreeting)" v-model="greeting">
 
             <hr>
 
@@ -71,7 +72,8 @@
                         isShown: true,
                         isVisible2: true,
                         isVisible3: true,
-                        isButtonActivated: false
+                        isButtonActivated: false,
+                        otherGreeting: 'Hi Vue 3!'
                     }
                 },
                 methods: {
@@ -80,6 +82,9 @@
                     },
                     greet() {
                         console.log(this.greeting)
+                    },
+                    greety(str) {
+                        console.log(str)
                     }
                 }
             })
