@@ -60,6 +60,14 @@
             <!-- <button @click="isButtonActivated = !isButtonActivated">Toggle Box</button> -->
             <button @click="toggleBox">Toggle Box</button>
             <div v-if="isButtonActivated" class="box three"></div>
+
+            <!-- @click.right would have listened specifically to the right click -->
+            <!-- 
+                @click.prevent would have replaced the event.prevent in the method
+                so it prevents a form to be submitted when the button is activated
+
+                it is possible to chain those modifiers
+            -->
         </div>
 
         <script src="https://unpkg.com/vue@next"></script>
