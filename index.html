@@ -76,7 +76,7 @@
 
             <hr>
 
-            <v-form />
+            <custom-form />
         </div>
 
         <script src="https://unpkg.com/vue@next"></script>
@@ -106,30 +106,75 @@
                 }
             })
 
-            app.component('v-form', {
+            app.component('custom-form', {
                 // I used 'prevent' because I want to handle the form submission with JS
                 // and not send the data to the server (default behavior)
                 // it avoids page refreshing -> basically the same as 'event.preventDefault()' inside the callback fct
                 template: `
                     <form @submit.prevent="handleSubmit">
                         <h1>{{ title }}</h1>
-                        <input type="email" v-model="email" />
-                        <input type="password" v-model="password" />
+                        <p v-for="str in inputs" :key="str">{{ str }}</p>
+                        <custom-input v-model="email" v-bind:label="emailLabel" />
+                        <custom-input v-model="password" :label="passwordLabel" />
+                        <custom-input label="Any questions?" />
                         <button type="submit">Submit</button>
                     </form>
-                `,
+                `, // v-bind:label & :label are equivalent
+                // with a v-binding, Vue is looking for a variable to bind
+                // with only a label, it will gonna pass the string value
                 data() {
                     return {
                         title: 'Login Form',
+                        inputs: [
+                            'email',
+                            'password',
+                            'name'
+                        ],
                         email: '',
-                        password: ''
+                        password: '',
+                        emailLabel: 'Email',
+                        passwordLabel: 'Password'
                     }
                 },
                 methods: {
                     handleSubmit() {
                         console.log(this.email, this.password)
                     }
+                },
+                components: ['custom-input']
+            })
+
+            app.component('custom-input', {
+                template: `
+                    <label>
+                        {{ label }}
+                        <input type="text" v-model="inputValue" />
+                    </label>
+                `,
+                // modelValue comes from the parent v-model binding,
+                // it does a :modelValue="email" under the under the hood
+                props: ['label', 'modelValue'],
+                computed: {
+                    inputValue: {
+                        get() {
+                            return this.modelValue
+                        },
+                        set(value) {
+                            // This fct emits events that other components can listen to.
+                            // So we can pass data around by Vue app like that.
+                            // update is a built-in Vue event
+                            //           type of event      value passed throught the event
+                            this.$emit('update:modelValue', value)
+                            // So from now, v-models from custom inputs in the form component are listening for update events from childs. 
+                            // Whenever those update events emit, the v-model from the parent updates the value of the variable.
+                        }
+                    }
                 }
+                // data() {
+                //     return {
+                //         inputValue: ''
+                //     }
+                // }
             })
 
             app.mount('#app')
