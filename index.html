@@ -113,9 +113,14 @@
                 template: `
                     <form @submit.prevent="handleSubmit">
                         <h1>{{ title }}</h1>
-                        <p v-for="str in inputs" :key="str">{{ str }}</p>
-                        <custom-input v-model="email" v-bind:label="emailLabel" />
-                        <custom-input v-model="password" :label="passwordLabel" />
+                        <!-- <p v-for="(str, i) in inputs" :key="i">{{ str }}</p> -->
+                        <custom-input
+                            v-for="(input, i) of inputs"
+                            :key="i"
+                            v-model="input.value"
+                            v-bind:label="input.model"
+                            :type="input.type"
+                        />
                         <custom-input label="Any questions?" />
                         <button type="submit">Submit</button>
                     </form>
@@ -126,9 +131,16 @@
                     return {
                         title: 'Login Form',
                         inputs: [
-                            'email',
-                            'password',
-                            'name'
+                            {
+                                label: 'Email',
+                                value: '',
+                                type: 'email'
+                            },
+                            {
+                                label: 'Password',
+                                value: '',
+                                type: 'password'
+                            }
                         ],
                         email: '',
                         password: '',
@@ -138,7 +150,7 @@
                 },
                 methods: {
                     handleSubmit() {
-                        console.log(this.email, this.password)
+                        console.log(this.inputs[0].value, this.inputs[1].value);
                     }
                 },
                 components: ['custom-input']
@@ -148,12 +160,12 @@
                 template: `
                     <label>
                         {{ label }}
-                        <input type="text" v-model="inputValue" />
+                        <input :type="type" v-model="inputValue" />
                     </label>
                 `,
                 // modelValue comes from the parent v-model binding,
                 // it does a :modelValue="email" under the under the hood
-                props: ['label', 'modelValue'],
+                props: ['label', 'type', 'modelValue'],
                 computed: {
                     inputValue: {
                         get() {
